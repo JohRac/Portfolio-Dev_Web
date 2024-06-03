@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import emailjs from "@emailjs/browser"
+import "../styles/Contact.scss"
 
 
 export function Contact() {
@@ -14,11 +15,14 @@ export function Contact() {
 
     const form = useRef()
 
+    const [completedForm, setCompletedForm] = useState(true)
 
     const handleSubmit = (event) => {
         event.preventDefault()
 
         if (name && email && message) {
+
+            setCompletedForm(true)
 
             emailjs
                 .sendForm(SERVICE_ID, TEMPLATE_ID, form.current, {
@@ -29,7 +33,7 @@ export function Contact() {
                     console.error("Erreur lors de l'envoi de l'email", error)
                 })
         } else {
-            alert("Veuillez remplir tous les champs demandés !")
+            setCompletedForm(false)
         }
     }
 
@@ -39,12 +43,15 @@ export function Contact() {
 
                 <label htmlFor="name">Nom:</label>
                 <input type="text" id="name" name="user_name" value={name} onChange={(e) => setName(e.target.value)} />
+                <span className={completedForm ? "hideWarning" : "showWarning" } >Veuillez remplir le champ ci-dessus !</span>
 
                 <label htmlFor="email">Email:</label>
                 <input type="email" id="email" name="user_email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <span className={completedForm ? "hideWarning" : "showWarning" } >Veuillez remplir le champ ci-dessus !</span>
 
                 <label htmlFor="message">Message:</label>
                 <textarea id="message" name="message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                <span className={completedForm ? "hideWarning" : "showWarning" } >Veuillez remplir le champ ci-dessus !</span>
 
                 <button type="submit">Envoyer</button>
             </form>
